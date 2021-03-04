@@ -256,7 +256,7 @@ fn replace_this_with_static(input: TokenStream2) -> TokenStream2 {
         .map(|token| match &token {
             TokenTree::Ident(ident) => {
                 if ident == "this" {
-                    TokenTree::Ident(format_ident!("static"))
+                    TokenTree::Ident(format_ident!("a"))
                 } else {
                     token
                 }
@@ -1261,9 +1261,9 @@ fn make_with_all_function(
     let generic_where = &generic_params.where_clause;
     let struct_defs = quote! {
         #[doc=#struct_documentation]
-        #visibility struct BorrowedFields #new_generic_params #generic_where { #(#fields),* }
+        #visibility struct BorrowedFields #new_generic_params #generic_where where 'a : 'this { #(#fields),* }
         #[doc=#mut_struct_documentation]
-        #visibility struct BorrowedMutFields #new_generic_params #generic_where { #(#mut_fields),* }
+        #visibility struct BorrowedMutFields #new_generic_params #generic_where where 'a : 'this { #(#mut_fields),* }
     };
     let borrowed_fields_type = quote! { BorrowedFields<#(#new_generic_args),*> };
     let borrowed_mut_fields_type = quote! { BorrowedMutFields<#(#new_generic_args),*> };
