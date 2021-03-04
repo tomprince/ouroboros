@@ -1,9 +1,15 @@
+mod struct_lifetime;
+
+#[cfg(broken)]
+mod broken {
+
 use ouroboros::self_referencing;
 use std::rc::Rc;
 use std::sync::Arc;
 
 #[cfg(test)]
 mod ok_tests;
+
 
 #[self_referencing]
 /// A simple struct which contains a `Box<i32>` and a `&'this i32`.
@@ -71,4 +77,5 @@ pub struct Visibility {
     pub public_field: &'this i32,
     #[borrows(private_field)]
     pub(crate) pub_crate_field: &'this i32,
+}
 }
